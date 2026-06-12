@@ -9,8 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProjetoRouteImport } from './routes/projeto'
+import { Route as DiarioRouteImport } from './routes/diario'
+import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as ArduinoRouteImport } from './routes/arduino'
 import { Route as IndexRouteImport } from './routes/index'
 
+const ProjetoRoute = ProjetoRouteImport.update({
+  id: '/projeto',
+  path: '/projeto',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiarioRoute = DiarioRouteImport.update({
+  id: '/diario',
+  path: '/diario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ArduinoRoute = ArduinoRouteImport.update({
+  id: '/arduino',
+  path: '/arduino',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +43,72 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/arduino': typeof ArduinoRoute
+  '/contato': typeof ContatoRoute
+  '/diario': typeof DiarioRoute
+  '/projeto': typeof ProjetoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/arduino': typeof ArduinoRoute
+  '/contato': typeof ContatoRoute
+  '/diario': typeof DiarioRoute
+  '/projeto': typeof ProjetoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/arduino': typeof ArduinoRoute
+  '/contato': typeof ContatoRoute
+  '/diario': typeof DiarioRoute
+  '/projeto': typeof ProjetoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
+  id: '__root__' | '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArduinoRoute: typeof ArduinoRoute
+  ContatoRoute: typeof ContatoRoute
+  DiarioRoute: typeof DiarioRoute
+  ProjetoRoute: typeof ProjetoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/projeto': {
+      id: '/projeto'
+      path: '/projeto'
+      fullPath: '/projeto'
+      preLoaderRoute: typeof ProjetoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diario': {
+      id: '/diario'
+      path: '/diario'
+      fullPath: '/diario'
+      preLoaderRoute: typeof DiarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/arduino': {
+      id: '/arduino'
+      path: '/arduino'
+      fullPath: '/arduino'
+      preLoaderRoute: typeof ArduinoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +121,21 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArduinoRoute: ArduinoRoute,
+  ContatoRoute: ContatoRoute,
+  DiarioRoute: DiarioRoute,
+  ProjetoRoute: ProjetoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
