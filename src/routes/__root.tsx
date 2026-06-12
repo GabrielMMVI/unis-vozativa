@@ -86,6 +86,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@vozativa" },
+      { name: "twitter:title", content: "VozAtiva" },
+      { name: "twitter:description", content: "Dispositivo Arduino para comunicação assistiva de crianças autistas não-verbais." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/64b5a233-9915-45b7-b177-ebb858990c8a/id-preview-0bec7390--5d2967dd-4003-4a1d-8dbf-388bc5a02fe1.lovable.app-1781224194854.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/64b5a233-9915-45b7-b177-ebb858990c8a/id-preview-0bec7390--5d2967dd-4003-4a1d-8dbf-388bc5a02fe1.lovable.app-1781224194854.png" },
     ],
     links: [
       {
