@@ -11,6 +11,7 @@ export function Header() {
     { to: "/projeto", label: "O Projeto" },
     { to: "/diario", label: "Diário de Bordo" },
     { to: "/arduino", label: "Arduino & Código" },
+    { to: "/simulador", label: "Simulador" },
   ];
 
   const isActive = (path: string) => currentPath === path;

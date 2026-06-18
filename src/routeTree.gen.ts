@@ -9,12 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SimuladorRouteImport } from './routes/simulador'
 import { Route as ProjetoRouteImport } from './routes/projeto'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as ArduinoRouteImport } from './routes/arduino'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SimuladorRoute = SimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProjetoRoute = ProjetoRouteImport.update({
   id: '/projeto',
   path: '/projeto',
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/contato': typeof ContatoRoute
   '/diario': typeof DiarioRoute
   '/projeto': typeof ProjetoRoute
+  '/simulador': typeof SimuladorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/contato': typeof ContatoRoute
   '/diario': typeof DiarioRoute
   '/projeto': typeof ProjetoRoute
+  '/simulador': typeof SimuladorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,27 @@ export interface FileRoutesById {
   '/contato': typeof ContatoRoute
   '/diario': typeof DiarioRoute
   '/projeto': typeof ProjetoRoute
+  '/simulador': typeof SimuladorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
+  fullPaths:
+    | '/'
+    | '/arduino'
+    | '/contato'
+    | '/diario'
+    | '/projeto'
+    | '/simulador'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
-  id: '__root__' | '/' | '/arduino' | '/contato' | '/diario' | '/projeto'
+  to: '/' | '/arduino' | '/contato' | '/diario' | '/projeto' | '/simulador'
+  id:
+    | '__root__'
+    | '/'
+    | '/arduino'
+    | '/contato'
+    | '/diario'
+    | '/projeto'
+    | '/simulador'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,10 +99,18 @@ export interface RootRouteChildren {
   ContatoRoute: typeof ContatoRoute
   DiarioRoute: typeof DiarioRoute
   ProjetoRoute: typeof ProjetoRoute
+  SimuladorRoute: typeof SimuladorRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/simulador': {
+      id: '/simulador'
+      path: '/simulador'
+      fullPath: '/simulador'
+      preLoaderRoute: typeof SimuladorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/projeto': {
       id: '/projeto'
       path: '/projeto'
@@ -125,17 +155,8 @@ const rootRouteChildren: RootRouteChildren = {
   ContatoRoute: ContatoRoute,
   DiarioRoute: DiarioRoute,
   ProjetoRoute: ProjetoRoute,
+  SimuladorRoute: SimuladorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
