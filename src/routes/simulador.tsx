@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export const Route = createFileRoute("/simulador")({
   head: () => ({
@@ -17,6 +17,12 @@ type LogEntry = { id: number; text: string };
 
 function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [logs]);
+
   const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
 
   const handlePress = (n: number) => {
@@ -43,9 +49,9 @@ function SimuladorPage() {
         </div>
 
         <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-10 shadow-xl">
-          <div className="grid md:grid-cols-2 gap-8 items-stretch">
+          <div className="grid md:grid-cols-2 gap-6 items-start">
             {/* Painel de botões */}
-            <div className="bg-slate-100 rounded-3xl p-6 relative aspect-square flex items-center justify-center">
+            <div className="bg-slate-100 rounded-3xl p-8 relative aspect-square flex items-center justify-center">
               <div className="absolute top-4 right-4 size-2.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
               <div className="grid grid-cols-4 gap-3 w-full h-full">
                 {buttons.map((n) => (
@@ -70,7 +76,7 @@ function SimuladorPage() {
               <h2 className="text-2xl font-bold text-accent-blue mb-3">
                 Terminal de comandos
               </h2>
-              <div className="bg-black rounded-2xl p-5 font-mono text-sm flex-1 min-h-[300px] overflow-y-auto border border-slate-700">
+              <div className="bg-black rounded-2xl p-5 font-mono text-sm h-[400px] overflow-y-auto border border-slate-700">
                 <p className="text-slate-400 mb-2">
                   &gt; Respostas do Arduino devem aparecer aqui
                 </p>

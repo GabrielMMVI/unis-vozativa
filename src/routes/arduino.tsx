@@ -74,32 +74,146 @@ function ArduinoPage() {
 
             <div className="bg-slate-800 rounded-2xl p-6 overflow-x-auto border border-slate-700">
               <pre className="text-sm text-slate-300 font-mono leading-relaxed">
-                <code>{`#include "SoftwareSerial.h"
-#include "DFRobotDFPlayerMini.h"
+                <code>{`#include <SoftwareSerial.h>
+#include <Keypad.h>
 
-SoftwareSerial mySerial(10, 11);
-DFRobotDFPlayerMini myDFPlayer;
+// --- Pino do LED ---
+const int LED = 13;
 
-const int buttons[] = {2, 3, 4, 5, 6, 7};
-const int numButtons = 6;
+// --- DFMini Player (Sempre verifique se a fiação RX/TX está cruzada) ---
+SoftwareSerial dfSerial(10, 11); // RX=10, TX=11
 
+// --- Configuração da Matriz (Keypad) ---
+// Definimos as dimensões
+const byte LINHAS = 4;
+const byte COLUNAS = 4;
+
+// Definimos os pinos corretos (de acordo com a esquemática fornecida)
+byte pinosLinhas[LINHAS] = {2, 3, 4, 5};
+byte pinosColunas[COLUNAS] = {6, 7, 8, 9};
+
+// Mapa numérico: Define o valor (char) que cada tecla retorna.
+// O valor retornado é o número do som a tocar (e o índice do nome).
+char mapaTeclas[LINHAS][COLUNAS] = {
+  { 1,  2,  3,  4},
+  { 5,  6,  7,  8},
+  { 9, 10, 11, 12},
+  {13, 14, 15, 16}
+};
+
+// Matriz de nomes para o Monitor Serial, correspondente ao mapa numérico.
+const char* nomesTeclas[LINHAS][COLUNAS] = {
+  {"Botao 1",  "Botao 2",  "Botao 3",  "Botao 4"},
+  {"Botao 5",  "Botao 6",  "Botao 7",  "Botao 8"},
+  {"Botao 9",  "Botao 10", "Botao 11", "Botao 12"},
+  {"Botao 13", "Botao 14", "Botao 15", "Botao 16"}
+};
+
+// Instanciação da biblioteca Keypad
+Keypad teclado = Keypad(makeKeymap(mapaTeclas), pinosLinhas, pinosColunas, LINHAS, COLUNAS);
+
+// ============================================
 void setup() {
-  mySerial.begin(9600);
-  myDFPlayer.begin(mySerial);
-  myDFPlayer.volume(25);
+  Serial.begin(9600);
+  dfSerial.begin(9600);
 
-  for (int i = 0; i < numButtons; i++) {
-    pinMode(buttons[i], INPUT_PULLUP);
+  // Configura LED
+  pinMode(LED, OUTPUT);
+  digitalWrite(LED, LOW);
+
+  // Inicializa DFMini (mantivemos sua lógica de init)
+  delay(1000);
+  dfMiniInit();
+
+  // Pisca LED 3x para indicar que está pronto
+  for (int i = 0; i < 3; i++) {
+    digitalWrite(LED, HIGH);
+    delay(200);
+    digitalWrite(LED, LOW);
+    delay(200);
+  }
+
+  Serial.println("=== PROJETO AUTISTAS PRONTO ===");
+  Serial.println("Pressione um botao!");
+}
+
+// ============================================
+void loop() {
+  // A biblioteca getKey() faz uma leitura instantânea. 
+  // Se não houver tecla pressionada, retorna 0 (falso).
+  char tecla = teclado.getKey();
+
+  if (tecla) {
+    // Tecla foi pressionada (retorna o valor char do mapaTeclas)
+    digitalWrite(LED, HIGH);
+
+    // Converte char para int para uso como número do som
+    int numTecla = (int)tecla;
+    
+    // Calcula os índices (linha e coluna) matematicamente com base no valor
+    int linha = (numTecla - 1) / 4;
+    int coluna = (numTecla - 1) % 4;
+
+    // Mostra no Monitor Serial
+    Serial.print("Pressionado: ");
+    Serial.print(nomesTeclas[linha][coluna]); // Busca o nome correto
+    Serial.print(" -> tocando som ");
+    Serial.println(numTecla); // Toca o som numérico
+
+    // Toca o som correspondente no DFMini
+    tocarSom(numTecla);
+
+    // Pequeno delay visual para o LED, mas sem travar o loop completamente
+    delay(150);
+    digitalWrite(LED, LOW);
   }
 }
 
-void loop() {
-  for (int i = 0; i < numButtons; i++) {
-    if (digitalRead(buttons[i]) == LOW) {
-      myDFPlayer.play(i + 1);
-      delay(500);
-    }
+// ============================================
+// Inicializa o modulo DFMini Player (Inalterado)
+void dfMiniInit() {
+  // Reseta o modulo
+  enviarComando(0x0C, 0, 0);
+  delay(500);
+
+  // Define fonte como cartao SD
+  enviarComando(0x09, 0, 2);
+  delay(200);
+
+  // Define volume (0 a 30)
+  enviarComando(0x06, 0, 25);
+  delay(200);
+
+  Serial.println("DFMini inicializado!");
+}
+
+// ============================================
+// Toca um arquivo de som pelo numero (Simplificado)
+void tocarSom(int numero) {
+  // O número do som é o terceiro parâmetro, convertemos int para byte
+  enviarComando(0x03, 0, (byte)numero);
+}
+
+// ============================================
+// Envia comando para o DFMini Player (Mantivemos sua lógica)
+void enviarComando(byte comando, byte param1, byte param2) {
+  byte msg[10] = {
+    0x7E,        // inicio
+    0xFF,        // versao
+    0x06,        // tamanho
+    comando,     // comando
+    0x00,        // feedback
+    param1,      // parametro 1
+    param2,      // parametro 2
+    0x00,        // checksum alto (simplificado)
+    0x00,        // checksum baixo
+    0xEF         // fim
+  };
+  for (int i = 0; i < 10; i++) {
+    dfSerial.write(msg[i]);
   }
+  // A biblioteca Keypad é rápida, esse delay aqui é necessário para o DFMini
+  delay(100); 
 }`}</code>
               </pre>
             </div>
