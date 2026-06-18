@@ -18,9 +18,12 @@ type LogEntry = { id: number; text: string };
 function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const terminalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const terminal = terminalRef.current;
+    if (terminal) {
+      terminal.scrollTo({ top: terminal.scrollHeight, behavior: "smooth" });
+    }
   }, [logs]);
 
   const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
@@ -76,7 +79,7 @@ function SimuladorPage() {
               <h2 className="text-2xl font-bold text-accent-blue mb-3">
                 Terminal de comandos
               </h2>
-              <div className="bg-black rounded-2xl p-5 font-mono text-sm h-[400px] overflow-y-auto border border-slate-700">
+              <div ref={terminalRef} className="bg-black rounded-2xl p-5 font-mono text-sm h-[400px] overflow-y-auto border border-slate-700">
                 <p className="text-slate-400 mb-2">
                   &gt; Respostas do Arduino devem aparecer aqui
                 </p>
