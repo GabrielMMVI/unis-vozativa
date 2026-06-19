@@ -132,9 +132,12 @@ function SimuladorPage() {
                   <button
                     key={n}
                     onClick={() => handlePress(n)}
-                    aria-label={`Botão ${n}`}
-                    className="rounded-xl bg-accent-blue/80 hover:bg-accent-blue active:scale-95 transition-all shadow-md"
-                  />
+                    aria-label={`Botão ${n}: ${phrases[n]}`}
+                    title={phrases[n]}
+                    className="rounded-xl bg-accent-blue/80 hover:bg-accent-blue active:scale-95 transition-all shadow-md flex items-center justify-center text-3xl md:text-4xl"
+                  >
+                    {icons[n]}
+                  </button>
                 ))}
               </div>
               {/* Detalhes laterais (alto-falante) */}
