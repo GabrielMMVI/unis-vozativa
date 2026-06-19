@@ -85,6 +85,8 @@ function SimuladorPage() {
     ]);
   };
 
+  const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
+
   return (
     <div className="min-h-screen bg-background font-sans text-text-main">
       <section className="max-w-5xl mx-auto px-6 py-16">
