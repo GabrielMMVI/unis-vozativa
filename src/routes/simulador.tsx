@@ -19,6 +19,8 @@ function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
   const terminalRef = useRef<HTMLDivElement>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
   useLayoutEffect(() => {
     const terminal = terminalRef.current;
     if (terminal) {
@@ -26,9 +28,40 @@ function SimuladorPage() {
     }
   }, [logs]);
 
+  const playBup = () => {
+    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    if (!audioCtxRef.current) {
+      audioCtxRef.current = new AudioContextClass();
+    }
+
+    const ctx = audioCtxRef.current;
+    if (ctx.state === "suspended") {
+      ctx.resume();
+    }
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(520, ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(260, ctx.currentTime + 0.12);
+
+    gain.gain.setValueAtTime(0.25, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+    osc.stop(ctx.currentTime + 0.12);
+  };
+
   const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
 
   const handlePress = (n: number) => {
+    playBup();
     setLogs((prev) => [
       ...prev,
       { id: Date.now() + n, text: `Botão ${n} pressionado, Som ${n} executado.` },
