@@ -19,10 +19,10 @@ function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
   const terminalRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const terminal = terminalRef.current;
     if (terminal) {
-      terminal.scrollTo({ top: terminal.scrollHeight, behavior: "smooth" });
+      terminal.scrollTop = terminal.scrollHeight;
     }
   }, [logs]);
 
