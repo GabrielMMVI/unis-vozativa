@@ -120,41 +120,14 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Demo Preview */}
-      <section className="max-w-5xl mx-auto px-6 py-24">
-        <div className="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white overflow-hidden relative">
-          <div className="relative z-10 max-w-xl">
-            <h2 className="text-4xl font-bold mb-6">
-              Como funciona na prática?
-            </h2>
-            <p className="text-slate-400 text-lg mb-10">
-              Abaixo simulamos o painel de comunicação. Cada ícone representa um
-              gatilho que o Arduino processa para gerar voz.
-            </p>
-
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {[
-                { label: "Fome", icon: "🍎" },
-                { label: "Sono", icon: "😴" },
-                { label: "Brincar", icon: "🧸" },
-                { label: "Banheiro", icon: "🚽" },
-                { label: "Dor", icon: "💢" },
-                { label: "Sair", icon: "🚪" },
-              ].map((item) => (
-                <button
-                  key={item.label}
-                  className="aspect-square bg-slate-800 rounded-2xl border border-slate-700 flex flex-col items-center justify-center gap-3 hover:bg-accent-blue transition-all cursor-pointer group"
-                >
-                  <span className="text-2xl">{item.icon}</span>
-                  <span className="text-xs font-semibold uppercase tracking-wider">
-                    {item.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="absolute right-[-10%] top-[-10%] size-96 bg-accent-blue/20 blur-[100px] rounded-full" />
-        </div>
+      {/* Simulador Interativo */}
+      <section className="max-w-5xl mx-auto px-6 py-16 flex justify-center">
+          <Link
+                to="/simulador"
+                className="px-8 py-4 bg-blue-900 text-white rounded-2xl font-semibold hover:bg-blue-800 transition-all"
+              >
+              Simulador Interativo
+          </Link>
       </section>
 
       {/* Recent Updates */}
