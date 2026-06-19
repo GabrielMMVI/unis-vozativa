@@ -58,15 +58,34 @@ function SimuladorPage() {
     osc.stop(ctx.currentTime + 0.12);
   };
 
-  const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
+  const phrases: Record<number, string> = {
+    1: "Sim",
+    2: "Não",
+    3: "Estou bem",
+    4: "Me sentindo mal",
+    5: "Estou com sede",
+    6: "Estou com fome",
+    7: "Quero ir no banheiro",
+    8: "Estou com sono",
+    9: "Mãe",
+    10: "Pai",
+    11: "Professor/a",
+    12: "Eu",
+    13: "Passeio",
+    14: "Casa",
+    15: "Abraço",
+    16: "Quarto",
+  };
 
   const handlePress = (n: number) => {
     playBup();
     setLogs((prev) => [
       ...prev,
-      { id: Date.now() + n, text: `Botão ${n} pressionado, Som ${n} executado.` },
+      { id: Date.now() + n, text: `${n}º Botão: ${phrases[n]}` },
     ]);
   };
+
+  const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
 
   return (
     <div className="min-h-screen bg-background font-sans text-text-main">
