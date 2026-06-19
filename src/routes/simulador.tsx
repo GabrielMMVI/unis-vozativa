@@ -77,6 +77,25 @@ function SimuladorPage() {
     16: "Quarto",
   };
 
+  const icons: Record<number, string> = {
+    1: "👍",
+    2: "👎",
+    3: "😊",
+    4: "🤢",
+    5: "🥤",
+    6: "🥪",
+    7: "🚽",
+    8: "😴",
+    9: "👩‍🍼",
+    10: "👨‍🍼",
+    11: "🧑‍🏫",
+    12: "🙋",
+    13: "🛝",
+    14: "🏠",
+    15: "🫂",
+    16: "🛏️",
+  };
+
   const handlePress = (n: number) => {
     playBup();
     setLogs((prev) => [
@@ -113,9 +132,12 @@ function SimuladorPage() {
                   <button
                     key={n}
                     onClick={() => handlePress(n)}
-                    aria-label={`Botão ${n}`}
-                    className="rounded-xl bg-accent-blue/80 hover:bg-accent-blue active:scale-95 transition-all shadow-md"
-                  />
+                    aria-label={`Botão ${n}: ${phrases[n]}`}
+                    title={phrases[n]}
+                    className="rounded-xl bg-accent-blue/80 hover:bg-accent-blue active:scale-95 transition-all shadow-md flex items-center justify-center text-3xl md:text-4xl"
+                  >
+                    {icons[n]}
+                  </button>
                 ))}
               </div>
               {/* Detalhes laterais (alto-falante) */}
