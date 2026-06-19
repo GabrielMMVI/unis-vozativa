@@ -77,6 +77,25 @@ function SimuladorPage() {
     16: "Quarto",
   };
 
+  const icons: Record<number, string> = {
+    1: "👍",
+    2: "👎",
+    3: "😊",
+    4: "🤢",
+    5: "🥤",
+    6: "🥪",
+    7: "🚽",
+    8: "😴",
+    9: "👩‍🍼",
+    10: "👨‍🍼",
+    11: "🧑‍🏫",
+    12: "🙋",
+    13: "🛝",
+    14: "🏠",
+    15: "🫂",
+    16: "🛏️",
+  };
+
   const handlePress = (n: number) => {
     playBup();
     setLogs((prev) => [
