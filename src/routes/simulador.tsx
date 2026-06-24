@@ -19,7 +19,7 @@ function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
   const terminalRef = useRef<HTMLDivElement>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  
 
   useLayoutEffect(() => {
     const terminal = terminalRef.current;
@@ -28,34 +28,18 @@ function SimuladorPage() {
     }
   }, [logs]);
 
-  const playBup = () => {
-    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
-    if (!AudioContextClass) return;
-
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new AudioContextClass();
-    }
-
-    const ctx = audioCtxRef.current;
-    if (ctx.state === "suspended") {
-      ctx.resume();
-    }
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(520, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(260, ctx.currentTime + 0.12);
-
-    gain.gain.setValueAtTime(0.25, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start();
-    osc.stop(ctx.currentTime + 0.12);
+  const speak = (text: string) => {
+    if (typeof window === "undefined" || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    const ptVoice = window.speechSynthesis
+      .getVoices()
+      .find((v) => v.lang === "pt-BR" || v.lang.startsWith("pt"));
+    if (ptVoice) utterance.voice = ptVoice;
+    window.speechSynthesis.speak(utterance);
   };
 
   const phrases: Record<number, string> = {
@@ -97,7 +81,7 @@ function SimuladorPage() {
   };
 
   const handlePress = (n: number) => {
-    playBup();
+    speak(phrases[n]);
     setLogs((prev) => [
       ...prev,
       { id: Date.now() + n, text: `${n}º Botão: ${phrases[n]}` },
