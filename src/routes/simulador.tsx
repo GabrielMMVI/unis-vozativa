@@ -19,7 +19,7 @@ function SimuladorPage() {
   const [logs, setLogs] = useState<LogEntry[]>([]);
 
   const terminalRef = useRef<HTMLDivElement>(null);
-  const audioCtxRef = useRef<AudioContext | null>(null);
+  
 
   useLayoutEffect(() => {
     const terminal = terminalRef.current;
