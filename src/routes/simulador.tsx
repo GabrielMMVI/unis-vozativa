@@ -81,7 +81,7 @@ function SimuladorPage() {
   };
 
   const handlePress = (n: number) => {
-    playBup();
+    speak(phrases[n]);
     setLogs((prev) => [
       ...prev,
       { id: Date.now() + n, text: `${n}º Botão: ${phrases[n]}` },
