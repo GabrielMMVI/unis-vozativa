@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useRef, useLayoutEffect } from "react";
+import { FundamentacaoDocs } from "@/components/FundamentacaoDocs";
+
 
 export const Route = createFileRoute("/simulador")({
   head: () => ({
