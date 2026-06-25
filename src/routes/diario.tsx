@@ -26,16 +26,6 @@ const posts = [
   },
   {
     id: 2,
-    title: "Primeiros testes na APAE: O que aprendemos?",
-    excerpt:
-      "Observações valiosas sobre a sensibilidade do toque e a necessidade de ícones mais universais para as crianças. Os primeiros resultados superaram nossas expectativas.",
-    category: "Estudo de Caso",
-    date: "05 Out, 2023",
-    readTime: "12 min",
-    color: "bg-orange-100 text-orange-600",
-  },
-  {
-    id: 3,
     title: "Otimizando o tempo de resposta do Arduino",
     excerpt:
       "Como reduzimos a latência para garantir que o feedback sonoro seja instantâneo ao toque, evitando frustração cognitiva na criança.",
@@ -45,7 +35,7 @@ const posts = [
     color: "bg-green-100 text-green-600",
   },
   {
-    id: 4,
+    id: 3,
     title: "Design sensorial: texturas que comunicam",
     excerpt:
       "A importância do feedback tátil e por que optamos por botões físicos com texturas distintas em vez de telas touch.",
