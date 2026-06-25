@@ -166,6 +166,9 @@ function SimuladorPage() {
           breve.
         </p>
       </section>
+
+      <FundamentacaoDocs />
     </div>
   );
 }
+
